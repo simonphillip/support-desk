@@ -1,8 +1,10 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { FaUser } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
-import { register } from '../features/authSlice';
+import { register, reset } from '../features/authSlice';
+import {useNavigate} from 'react-router-dom';
+import Spinner from '../components/Spinner';
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -13,11 +15,27 @@ function Register() {
   })
 
   const {name, email, password, password2} = formData;
+  const navigate = useNavigate();
 
   //useDispatch allows you dispatch data off to redux store
   const dispatch = useDispatch();
   //use Selector allows you to gain access to your store state variables
-  const {user, isLoading, isSuccess, message} = useSelector(state => state.auth);
+  const {user, isLoading, isError, isSuccess, message} = useSelector(state => state.auth);
+
+  useEffect(() => {
+
+    if(isError) {
+      toast.error(message);
+    }
+
+    //Redirect when logged in
+    if(isSuccess && user) {
+      navigate('/');
+    }
+
+    dispatch(reset());
+
+  }, [isError, isSuccess, user, message, navigate, dispatch])
 
   const onChange = e => {
     setFormData(prevState => ({
@@ -41,9 +59,11 @@ function Register() {
       //register comes from the authSlice asyncThunk
       dispatch(register(userData));
 
-    }
+    } 
+  }
 
-    
+  if(isLoading) {
+    return <Spinner />
   }
   
   return (

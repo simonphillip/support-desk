@@ -27,6 +27,8 @@ app.get('/', (req, res) => {
 //Routes
 //Hook up user route file to api endpoint
 app.use('/api/users', require('./routes/userRoutes'));
+//Hook up ticket route file to api endpoint
+app.use('/api/tickets', require('./routes/ticketRoutes'));
 
 app.use(errorHandler);
 
