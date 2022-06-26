@@ -19,7 +19,6 @@ const getTicket = asyncHandler(async (req, res) => {
     }
 
     const ticket = await Ticket.findById(req.params.id);
-    console.log(ticket);
 
     if (!ticket) {
         res.status(404);

@@ -13,7 +13,6 @@ const PrivateRoute = () => {
 
   return (
     <>
-    {console.log(loggedIn)}
     {loggedIn ? <Outlet /> : <Navigate to='/login' />}
     </>
   )
